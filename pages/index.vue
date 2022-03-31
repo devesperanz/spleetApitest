@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header @add-todo="addTodo" />
+    <Header @add-post="addPost" />
     <div v-for="post in formattedPost" :key="post.id">
       <AllPost :post="post" @del-post="deletePost" @edit-post="editPost" />
     </div>
@@ -10,9 +10,8 @@
 <script>
 import AllPost from "../components/AllPost.vue";
 import Header from "../components/Header.vue";
-const STORAGE_KEY = "todo-storage-key";
 import { v4 as uuidv4 } from "uuid";
-const THEME_KEY = "todo-theme-key";
+const STORAGE_KEY = "post-storage";
 export default {
   components: { Header, AllPost },
   name: "IndexPage",
@@ -39,39 +38,42 @@ export default {
       try {
         const post = await this.$axios.$get("/posts");
         this.posts = post;
+        this.posts = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
       } catch (error) {
-        this.jokes = [{ title: "No Posts found" }];
+        console.error(err);
       }
     },
-    saveList() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.jokes));
-    },
-    async addTodo(item) {
+    async addPost(item) {
       try {
         const newData = await this.$axios.$post("/posts", item);
         this.posts.unshift(newData);
-      } catch (error) {}
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(this.posts));
+      } catch (error) {
+        console.error(err);
+      }
     },
-    async deletePost(item) {
+    async deletePost(post) {
       try {
-        const res = await this.$axios.$delete(`/posts/${item.id}`);
-        if ((res.status = "200")) {
-          this.posts.splice(item.id, 1);
-        } else {
-          return this.posts;
-        }
-      } catch (error) {}
+        await this.$axios.$delete(`/posts/${post.id}`);
+        this.posts = this.formattedPost.filter((item) => item.id !== post.id);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(this.posts));
+      } catch (error) {
+        console.error(err);
+      }
     },
+
     async editPost(item) {
       if (!item.title) {
         this.deletePost(item);
       }
       console.log(item);
-      try {
-        await this.$axios.$put(`/posts/${item.id}`, item);
-      } catch (err) {
-        console.error(err);
-      }
+      item.title = item.title.trim();
+      // try {
+      //   await this.$axios.$put(`/posts/${item.id}`, item);
+      //   // localStorage.setItem(STORAGE_KEY, JSON.stringify(this.posts));
+      // } catch (err) {
+      //   console.error(err);
+      // }
     },
   },
 };

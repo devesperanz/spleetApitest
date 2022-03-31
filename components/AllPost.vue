@@ -70,7 +70,7 @@ export default {
   },
   data() {
     return {
-      editedPost: false,
+      editedPost: {},
     };
   },
   methods: {
@@ -78,6 +78,7 @@ export default {
       if (!this.editedPost) {
         return;
       }
+      this.editedPost = null;
       this.$emit("edit-post", post);
     },
     editTodo(post) {

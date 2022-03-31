@@ -28,11 +28,11 @@ export default {
       if (this.title === "") {
         return;
       }
-      const newTodo = {
+      const newPost = {
         id: uuidv4(),
         title: this.title,
       };
-      this.$emit("add-todo", newTodo);
+      this.$emit("add-post", newPost);
       this.title = "";
     },
   },
