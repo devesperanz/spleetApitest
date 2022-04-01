@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import { v4 as uuidv4 } from "uuid";
 export default {
   data() {
     return {
@@ -29,7 +28,6 @@ export default {
         return;
       }
       const newPost = {
-        id: uuidv4(),
         title: this.title,
       };
       this.$emit("add-post", newPost);
