@@ -1,33 +1,4 @@
 <template>
-  <!-- <div>
-    <v-sheet
-      outlined
-      :class="{editing : post === }"
-      class="pa-4 mb-4 mx-auto d-flex justify-space-between align-center"
-      max-width="1200"
-    >
-      <h2>{{ post.title }}</h2>
-      <div>
-        <v-btn icon @click="editPost(todo)">
-          <v-icon>mdi-square-edit-outline</v-icon>
-        </v-btn>
-        <v-btn icon @click="$emit('del-post', post)">
-          <v-icon>mdi-trash-can-outline</v-icon>
-        </v-btn>
-      </div>
-    </v-sheet>
-    <div class="edit">
-      <v-text-field
-        @keyup.enter="doneEdit(post)"
-        @blur="doneEdit(post)"
-        filled
-        v-model="post.title"
-        solo
-        height="65"
-        hide-details="true"
-      />
-    </div>
-  </div> -->
   <div :class="{ editing: post === editedPost }">
     <v-sheet
       outlined
