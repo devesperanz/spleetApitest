@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import vuetifyToast from "vuetify-toast";
 import AllPost from "../components/AllPost.vue";
 import Header from "../components/Header.vue";
 export default {
@@ -26,24 +27,27 @@ export default {
       try {
         const post = await this.$axios.$get("/posts");
         this.posts = post;
+        vuetifyToast.success("Post successfully fetched");
       } catch (error) {
-        console.log(err);
+        vuetifyToast.error("Something went wrong");
       }
     },
     async addPost(item) {
       try {
         const newData = await this.$axios.$post("/posts", item);
         this.posts.unshift(newData);
+        vuetifyToast.success("You have successfully added a post.");
       } catch (error) {
-        console.log(err);
+        vuetifyToast.error("Something went wrong");
       }
     },
     async deletePost(post) {
       try {
         await this.$axios.$delete(`/posts/${post.id}`);
         this.posts = this.posts.filter((item) => item.id !== post.id);
+        vuetifyToast.success("You have successfully deleted a post.");
       } catch (error) {
-        console.error(err);
+        vuetifyToast.error("Something went wrong");
       }
     },
 
@@ -53,8 +57,9 @@ export default {
       }
       try {
         await this.$axios.$put(`/posts/${item.id}`, item);
-      } catch (err) {
-        console.error(err);
+        vuetifyToast.success("You have successfully edited a post.");
+      } catch {
+        vuetifyToast.error("Something went wrong");
       }
     },
   },
